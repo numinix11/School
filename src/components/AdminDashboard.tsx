@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Users, Image as ImageIcon, Bell, BookOpen, LogOut, Plus, Trash2, Eye, EyeOff, X, GraduationCap, Edit3 } from 'lucide-react';
+import { Users, Image as ImageIcon, Bell, BookOpen, LogOut, Plus, Trash2, Eye, EyeOff, X, GraduationCap, Edit3, Sparkles } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import toast from 'react-hot-toast';
 import LoadingSpinner from './ui/LoadingSpinner';
 import MarksManagement from './MarksManagement';
 import EditUserForm from './ui/EditUserForm';
+import FeatureManagement from './FeatureManagement';
 
 const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [admin, setAdmin] = useState<any>(null);
-  const [activeTab, setActiveTab] = useState<'users' | 'gallery' | 'notices' | 'marks'>('users');
+  const [activeTab, setActiveTab] = useState<'users' | 'gallery' | 'notices' | 'marks' | 'features'>('users');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -57,7 +58,7 @@ const AdminDashboard: React.FC = () => {
           </div>
         </motion.div>
 
-        <div className="flex gap-4 mb-6">
+        <div className="flex gap-4 mb-6 flex-wrap">
           <button onClick={() => setActiveTab('users')} className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${activeTab === 'users' ? 'bg-blue-500 text-white shadow-lg' : 'bg-white text-gray-700 hover:bg-gray-50'}`}>
             <Users className="w-5 h-5" />
             Manage Users
@@ -74,6 +75,10 @@ const AdminDashboard: React.FC = () => {
             <GraduationCap className="w-5 h-5" />
             Marks Management
           </button>
+          <button onClick={() => setActiveTab('features')} className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${activeTab === 'features' ? 'bg-blue-500 text-white shadow-lg' : 'bg-white text-gray-700 hover:bg-gray-50'}`}>
+            <Sparkles className="w-5 h-5" />
+            Features
+          </button>
         </div>
 
         <motion.div key={activeTab} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="bg-white rounded-3xl shadow-xl p-6">
@@ -81,6 +86,7 @@ const AdminDashboard: React.FC = () => {
           {activeTab === 'gallery' && <GalleryManagement adminId={admin?.id} />}
           {activeTab === 'notices' && <NoticesManagement adminId={admin?.id} />}
           {activeTab === 'marks' && <MarksManagement userRole="admin" userId={admin?.id} />}
+          {activeTab === 'features' && <FeatureManagement adminId={admin?.id} />}
         </motion.div>
       </div>
     </div>
